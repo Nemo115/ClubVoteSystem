@@ -6,6 +6,7 @@ import Join from './Pages/Join';
 import { useState } from 'react';
 import { HomePage } from './Pages/Home';
 import { CreatePage } from './Pages/Create';
+import Voting from './Pages/Voting';
 
 function App() {
 
@@ -22,6 +23,10 @@ function App() {
       path: '/create',
       element: <CreatePage />
     },
+    {
+      path: '/voting',
+      element: <Voting />
+    }
   ])
 
 
