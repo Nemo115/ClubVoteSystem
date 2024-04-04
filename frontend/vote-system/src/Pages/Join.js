@@ -15,7 +15,7 @@ export default function Join() {
   return (
     <div style={styles.container}>
         <h2>Voting</h2>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={handleSubmit}>
             <label>
                 Input Election Code
                 <input type="text" value={this.state.value}/>
