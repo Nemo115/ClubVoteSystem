@@ -1,11 +1,15 @@
 import { useState } from "react";
 import hero from '../assets/hero.jpg';
+import consistent from '../assets/consistent.jpg'
+import easy from '../assets/easy.png'
+import impartial from '../assets/impartial.png'
 import { themeBackground, themeHighlight } from "../constants";
+import { AboutItem, Footer } from "../Components/Components";
 
 const HomePage = () => 
 {
     return (
-        <div>
+        <div style={HomePageStyle.homeWrapper}>
             <div style={HomePageStyle.heroWrapper}>    
                 <img style={HomePageStyle.hero} src={hero}></img>
                 <div style={HomePageStyle.heroContentWrapper}>
@@ -16,11 +20,21 @@ const HomePage = () =>
                     <button style={HomePageStyle.createButton}>CREATE ELECTION</button>
                 </div>
             </div>
+            <h2>About</h2>
+            <AboutItem heading={'Impartial'} text={'Sample text'} picture={impartial}/>
+            <AboutItem heading={'Consistent'} text={'Sample text'} picture={consistent}/>
+            <AboutItem heading={'Easy'} text={'Sample text'} picture={easy}/>
+            <Footer />
         </div>
     )
 }
 
 const HomePageStyle = {
+    homeWrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
     heroWrapper: {
         height: '70vh',
         width: '100%',

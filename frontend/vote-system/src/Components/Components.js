@@ -42,4 +42,58 @@ const HeaderStyle = {
 }
 
 
-export {Header}
+const AboutItem = ({picture, heading, text}) => 
+{
+    return (
+        <div style={AboutItemStyle.wrapper}>
+            <div style={AboutItemStyle.text}>
+                <h2 style={AboutItemStyle.itemHeading}>{heading}</h2>
+                <p>{text}</p>
+            </div>
+            <img style={AboutItemStyle.picture} src={picture}></img>
+        </div>
+    )
+}
+
+const AboutItemStyle = {
+    wrapper: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        gridTemplateColumns: '1fr 2rem',
+        border: '0.1rem solid lightgrey',
+        borderRadius: '1rem',
+        width: '50rem',
+        marginBottom: '2rem',
+        overflow: 'hidden',
+    },
+    picture: {
+        height: '10rem',
+        width: '10rem',
+        objectFit: 'cover',
+    },
+    text: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        paddingLeft: '2rem',
+    },
+    itemHeading: {
+        marginBottom: 0,
+    }
+}
+
+const Footer = () => {
+    return (
+        <div style={FooterStyle.wrapper}></div>
+    )
+}
+
+const FooterStyle = {
+    wrapper: {
+        width: '100%',
+        backgroundColor: themeHighlight,
+        height: '33vh',
+    }
+}
+
+export {Header, AboutItem, Footer}
