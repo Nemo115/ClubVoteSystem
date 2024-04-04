@@ -195,6 +195,11 @@ def delist_club(club_id):
 
     return jsonify({"message": "Club delisted!"}), 200
 
+#GET CLUB NAME AND LOGO
+@app.route('/get_club/<int:club_id>', methods = ["GET"])
+def get_club(club_id):
+    club_search = models.Clubs.query.get(club_id)
+    return jsonify(club_search), 200
 
 if __name__ == "__main__":
     db.create_all()
