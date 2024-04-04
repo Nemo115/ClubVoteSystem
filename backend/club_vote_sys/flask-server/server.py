@@ -16,7 +16,6 @@ class sample_table(db.Model):{
         self.email = email'''
 }
 
-
 db.create_all()
 
 @app.route('/')
