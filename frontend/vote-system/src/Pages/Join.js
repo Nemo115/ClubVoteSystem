@@ -1,6 +1,7 @@
 import React from 'react'
 import '../constants'
 import { themeBackground } from '../constants';
+import { themeHighlight } from '../constants';
 import { useState } from 'react';
 
 export default function Join() {
@@ -24,12 +25,21 @@ export default function Join() {
 
   return (
     <div style={styles.container}>
-        <h2>Enter Election Code: </h2>
+        <h2>Enter Information</h2>
         <div style={formContainerStyle}>
-            <input style={formStyle} name="name" type="text" value={formData.name} onChange={changeForm}/>
-            <input style={formStyle} name="email" type="text" value={formData.email} onChange={changeForm}/>
-            <input style={formStyle} name= "studentId" type="text" value={formData.studentId} onChange={changeForm}/>
-            <input type="submit" onClick={submit}/>
+            <label htmlFor="" style={formStyle.label}>
+                Name:
+                <input style={formStyle.input} name="name" type="text" value={formData.name} onChange={changeForm}/>
+            </label>
+            <label htmlFor="" style={formStyle.label}>
+                Email:
+                <input style={formStyle.input} name="email" type="text" value={formData.email} onChange={changeForm}/>
+            </label>
+            <label htmlFor="" style={formStyle.label}>
+                Student ID:
+                <input style={formStyle.input} name= "studentId" type="text" value={formData.studentId} onChange={changeForm}/>
+            </label>
+            <input style={formStyle.submit}     type="submit" onClick={submit}/>
         </div>
     </div>
   )
@@ -42,11 +52,36 @@ const styles = {
 };
 
 const formContainerStyle = {
-    margin: 'auto'
+    margin: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
 }
 
 const formStyle = {
-    width: '100%',
-    marginBottom: '10px',
-    borderRadius: '3px'
+    input: {
+        marginTop: '0.5rem',
+        width: '70%',
+        height: '2rem',
+        fontSize: '1rem',
+        textAlign: 'center',
+        marginBottom: '0.5rem',
+        marginLeft: '0.5rem'
+    },
+    label: {
+        wdith: '100%',
+        fontSize: '20px'
+    },
+    submit: {
+        backgroundColor: themeHighlight,
+        height: '2.5rem',
+        border: 0,
+        outline: 0,
+        border: '0.05rem solid white',
+        borderRadius: '0.2rem',
+        fontSize: '1rem',
+        color: 'white',
+        fontFamily: 'Roboto',
+        width: '50%',
+    }
 }
