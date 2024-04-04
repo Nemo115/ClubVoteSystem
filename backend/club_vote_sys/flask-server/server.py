@@ -17,50 +17,42 @@ class Election(db.Model):
     ElectionCode = db.Column(db.String(45))
     StartTime = db.Column(db.String(45))
     EndTime = db.Column(db.String(45))
-'''
+
 class ElectionCreationEvent(db.Model):
     __tablename__ = 'ElectionCreationEvent'
     ElectionCreationID = db.Column(db.Integer, primary_key=True)
     CreationTime = db.Column(db.String(45))
-    ElectionID = db.Column(db.String(45), db.ForeignKey('Election.ElectionID'))
+    ElectionID = db.Column(db.Integer, db.ForeignKey('Election.ElectionID'))
 
 class ElectionCreator(db.Model):
     __tablename__ = 'ElectionCreator'
     Email = db.Column(db.Integer, primary_key=True)
 
-class EmailVerificationEvent(db.Model):
-    __tablename__ = 'EmailVerificationEvent'
-    VerificationID = db.Column(db.Integer, primary_key=True)
-    Email = db.Column(db.String(45), db.ForeignKey('Voters.Email'))
-    VerificationCode = db.Column(db.String(45))
-    ExpirationTime = db.Column(db.String(45))
-    Status = db.Column(db.String(45))
-
 class Nominees(db.Model):
     __tablename__ = 'Nominees'
+    NomineeID = db.Column(db.Integer, primary_key=True)
     Names = db.Column(db.String(45))
     position = db.Column(db.String(45))
     Email = db.Column(db.String(45))
-    NomineeID = db.Column(db.String(45), primary_key=True)
 
 class ParticipationEvent(db.Model):
     __tablename__ = 'ParticipationEvent'
     ParticipationID = db.Column(db.Integer, primary_key=True)
     Status = db.Column(db.String(45))
-    ElectionID = db.Column(db.String(45), db.ForeignKey('Election.ElectionID'), primary_key=True)
-    NomineeID = db.Column(db.String(45), db.ForeignKey('Nominees.NomineeID'), primary_key=True)
+    ElectionID = db.Column(db.Integer, db.ForeignKey('Election.ElectionID'), primary_key=True)
+    NomineeID = db.Column(db.Integer, db.ForeignKey('Nominees.NomineeID'))
 
 class Voters(db.Model):
     __tablename__ = 'Voters'
+    VoterID = db.Column(db.Integer, primary_key=True)
     Verified_status = db.Column(db.Boolean)
-    Email = db.Column(db.String(45))
-    VoterID = db.Column(db.String(45), primary_key=True)
+    Email = db.Column(db.String(45), unique = True)
 
 class Votes(db.Model):
     __tablename__ = 'Votes'
     VoteID = db.Column(db.Integer, primary_key=True)
     VoterID = db.Column(db.Integer, db.ForeignKey('Voters.VoterID'))
-    NomineeID = db.Column(db.String(45), db.ForeignKey('Nominees.NomineeID'))
+    NomineeID = db.Column(db.Integer, db.ForeignKey('Nominees.NomineeID'))
     Timestamp = db.Column(db.String(45))
 
 class VotingEvent(db.Model):
@@ -69,8 +61,16 @@ class VotingEvent(db.Model):
     Status = db.Column(db.String(45))
     EligibilityStatus = db.Column(db.String(45))
     ElectionID = db.Column(db.Integer, db.ForeignKey('Election.ElectionID'), primary_key=True)
-    VoterID = db.Column(db.String(45), db.ForeignKey('Voters.VoterID'), primary_key=True)
-'''
+    VoterID = db.Column(db.Integer, db.ForeignKey('Voters.VoterID'), primary_key=True)
+
+class EmailVerificationEvent(db.Model):
+    __tablename__ = 'EmailVerificationEvent'
+    VerificationID = db.Column(db.Integer, primary_key=True)
+    #Email = db.Column(db.String(45), db.ForeignKey('Voters.Email'))
+    VoterID = db.Column(db.Integer, db.ForeignKey('Voters.VoterID'))
+    VerificationCode = db.Column(db.String(45))
+    ExpirationTime = db.Column(db.String(45))
+    Status = db.Column(db.String(45))
 
 print(str(db)+'|||')
 
@@ -96,3 +96,4 @@ def verify_vote():
 if __name__ == "__main__":
     db.create_all()
     app.run(debug = True)
+    
