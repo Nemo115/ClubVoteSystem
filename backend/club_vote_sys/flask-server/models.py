@@ -4,6 +4,12 @@ THIS SCRIPT DEFINES ALL DATABASE MODELS SEPARATELY FOR USAGE IN main.py SCRIPT
 from config import db
 
 #[---SQL TABLES---]
+class Clubs(db.Model):
+    __tablename__ = 'Clubs'
+    club_id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    club_name = db.Column(db.String(45))
+    photo_url = db.Column(db.String(45))
+
 class Election(db.Model):
     __tablename__ = 'Election'
     election_id = db.Column(db.Integer, primary_key=True, autoincrement = True)
@@ -12,6 +18,7 @@ class Election(db.Model):
     election_code = db.Column(db.String(45))
     start_time = db.Column(db.String(45))
     end_time = db.Column(db.String(45))
+    club_id = db.Column(db.Integer, db.ForeignKey('Clubs.club_id'))
 
     def to_json(self):
         return {
@@ -20,7 +27,8 @@ class Election(db.Model):
             "description": self.description,
             "electionCode":self.election_code,
             "startTime":self.start_time,
-            "endTime":self.end_time
+            "endTime":self.end_time,
+            "clubID": self.club_id
         }
 
 class ElectionCreationEvent(db.Model):
@@ -48,14 +56,14 @@ class ElectionCreator(db.Model):
 class Nominees(db.Model):
     __tablename__ = 'Nominees'
     nominee_id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    names = db.Column(db.String(45))
+    name = db.Column(db.String(45))
     position = db.Column(db.String(45))
     email = db.Column(db.String(45))
 
     def to_json(self):
         return {
             "nomineeID": self.nominee_id,
-            "names": self.names,
+            "name": self.name,
             "position": self.position,
             "email": self.email
         }
