@@ -1,0 +1,11 @@
+.headerMenu > button {
+    background-color: transparent;
+    font-size: 1.2rem;
+    border: none;
+    color: white;
+}
+
+.headerMenu > button:hover {
+    font-weight: bold;
+    border-bottom: 0.1rem solid white;
+}
