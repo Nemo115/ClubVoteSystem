@@ -5,13 +5,12 @@ import Join from './Pages/Join';
 import { useState } from 'react';
 
 function App() {
-  const [page, setPage] = useState('page');
+  const [page, setPage] = useState('join');
 
   return (
     <div className="App">
       <Header />
       {page === 'join'? <Join /> : null}
-      
     </div>
   );
 }
