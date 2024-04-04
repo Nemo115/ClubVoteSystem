@@ -1,0 +1,26 @@
+app/api/v1/:
+            election/create:
+                            send -> {
+                                "election_name":"",
+                                "candidates": [],
+                                "options":{},
+                                "start_time":,
+                                "end_time"
+                            }
+            votes/submit:
+                            {
+                                "positions":[
+                                    {
+                                        "position_name":"",
+                                        "vote_list":[candidates]
+                                    }
+                                ],
+                                "voter_email":"",
+                                "verified": False
+                            }
+            votes/verify: (Voter will click on link in email and it will send a request to change their row in the database)
+                            {
+                                "voter_email":"",
+                                "verified": True
+                            }
+            
