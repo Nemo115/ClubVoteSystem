@@ -4,6 +4,73 @@ THIS SCRIPT DEFINES ALL DATABASE MODELS SEPARATELY FOR USAGE IN main.py SCRIPT
 from config import db
 
 #[---SQL TABLES---]
+
+class Election(db.Model):
+    __tablename__ = 'Election'
+    election_id = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    name = db.Column(db.String(45))
+    description = db.Column(db.String(45))
+    start_time = db.Column(db.DateTime)
+    end_time = db.Column(db.DateTime)
+    show_results = db.Column(db.Boolean)
+
+    def to_json(self):
+        return {
+            "electionID":self.election_id,
+            "name": self.name,
+            "description": self.description,
+            "electionCode":self.election_code,
+            "startTime":self.start_time,
+            "endTime":self.end_time,
+            "showResults":self.show_results
+        }
+
+class Position(db.Model):
+    __tablename__ = 'Position'
+    position_id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    election_id = db.Column(db.Integer, db.ForeignKey('Election.election_id'))
+
+    def to_json(self):
+        return {
+            "positionID": self.position_id,
+            "electionID": self.election_id
+        }
+
+class Nominee(db.Model):
+    __tablename__ = 'Nominee'
+    nominee_id = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    name = db.Column(db.String(45))
+    position_id = db.Column(db.Integer, db.ForeignKey('Position.position_id'))
+    email = db.Column(db.String(45))
+    score = db.Column(db.Integer)
+
+    def to_json(self):
+        return {
+            "nomineeID": self.nominee_id,
+            "name": self.name,
+            "positionID": self.position_id,
+            "email": self.email,
+            "score": self.score
+        }
+
+class Voters(db.Model):
+    __tablename__ = 'Voters'
+    voter_id = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    name = db.Column(db.String(45))
+    email = db.Column(db.String(45), unique = True)
+    verified_status = db.Column(db.Boolean)
+    election_id = db.Column(db.Integer, db.ForeignKey('Election.election_id'))
+
+    def to_json(self):
+        return{
+            "voterID": self.voter_id,
+            "name": self.name,
+            "email": self.email,
+            "verifiedStatus": self.verified_status,
+            "electionID": self.election_id
+        }
+
+'''
 class Clubs(db.Model):
     __tablename__ = 'Clubs'
     club_id = db.Column(db.Integer, primary_key = True, autoincrement = True)
@@ -143,4 +210,4 @@ class EmailVerificationEvent(db.Model):
             "verificationCode": self.verification_code,
             "expirationTime": self.expiration_time,
             "status": self.status
-        }
+        }'''
