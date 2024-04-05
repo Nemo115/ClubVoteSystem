@@ -317,10 +317,6 @@ def submit_vote2(position_id, voter_id, preference_list):
 
     return jsonify({}), 201
 
-
-
-    
-
 #@app.route('/create_vote', method = ["GET", "POST"])
 #def sub
 
