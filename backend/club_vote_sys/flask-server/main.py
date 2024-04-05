@@ -277,14 +277,14 @@ def submit_vote3():
     email = request.json.get('email')
 
     try:
-        new_voter models.Voter(name=name, email=email)
+        new_voter = models.Voter(name=name, email=email)
         db.session.add(new_voter)
         db.session.commit()
     except: 
         return jsonify({}), 500
 
     if not nominees:
-        return jsonify({}) 400
+        return jsonify({}), 400
     for n in nominees:
 
         submit_vote2(n['position_id'], new_voter.voter_id, n)
@@ -318,7 +318,7 @@ def submit_vote2(position_id, voter_id, preference_list):
 #default page for looking at sql database values
 @app.route('/')
 def return_database_values():
-    return get_nominees()
+    return get_voters()
 
 if __name__ == "__main__":
     db.create_all()
