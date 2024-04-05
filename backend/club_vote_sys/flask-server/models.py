@@ -28,6 +28,7 @@ class Election(db.Model):
 class Position(db.Model):
     __tablename__ = 'Position'
     position_id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    name = db.Column(db.String(45))
     election_id = db.Column(db.Integer, db.ForeignKey('Election.election_id'))
 
     def to_json(self):

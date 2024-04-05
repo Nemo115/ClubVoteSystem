@@ -1,7 +1,7 @@
 const themeBackground = '#fff';
 const themeHighlight = '#68217a';
 const title = 'votecounter';
-const BACKEND_URL = 'http://localhost:3001'
+const BACKEND_URL = 'http://localhost:5000/api'
 
 export {
     themeBackground,

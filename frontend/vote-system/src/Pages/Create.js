@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { themeHighlight } from "../constants"
+import { BACKEND_URL, themeHighlight } from "../constants"
 import axios from 'axios'
 
 
@@ -9,13 +9,15 @@ const CreatePage = () => {
     const [startTime, setStartTime] = useState('--:--')
     const [finishTime, setFinishTime] = useState('--:--')
     const [positions, setPositions] = useState([])
+    const [name, setName] = useState('')
 
     const handleSubmit = () => {
         axios({
             method: 'POST',
-            url: 'http://backend.com',
+            url: `${BACKEND_URL}/elections/create`,
             data: {
-                name: description,
+                description,
+                name,
                 startTime,
                 finishTime,
                 showResults,
@@ -67,8 +69,12 @@ const CreatePage = () => {
                 <input style={CreatePageStyle.optionsCategoryRight} type="time" value={startTime} onChange={e => setStartTime(e.target.value)}></input>
             </div>            
             <div style={CreatePageStyle.optionItem}>
-                <p style={CreatePageStyle.optionsCategoryLeft}>Description: </p>
+                <p style={CreatePageStyle.optionsCategoryLeft}>description: </p>
                 <input style={CreatePageStyle.optionsCategoryRight} value={description} onChange={e => setDescription(e.target.value)}></input>
+            </div>            
+            <div style={CreatePageStyle.optionItem}>
+                <p style={CreatePageStyle.optionsCategoryLeft}>name: </p>
+                <input style={CreatePageStyle.optionsCategoryRight} value={name} onChange={e => setName(e.target.value)}></input>
             </div>            
             <div style={CreatePageStyle.optionItem}>
                 <p style={CreatePageStyle.optionsCategoryLeft}>End time:</p>
