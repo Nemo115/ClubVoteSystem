@@ -44,10 +44,7 @@ def get_election():
     nominees = models.Nominee.query.filter(models.Nominee.election_id == election_id).all()
     return_nominees = []
     for nominee in nominees:
-        position = models.Position.query.get(nominee.position_id)
-        nominee = nominee.to_json()
-        nominee["position"] = position.name
-        return_nominees.append(nominee)
+        return_nominees.append(nominee.to_json())
     
     return jsonify({"election": election.to_json(), "nominees": return_nominees})
 
@@ -286,12 +283,15 @@ def submit_vote3():
     email = request.json.get('email')
 
     try:
-        new_voter = models.Voter(name=name, email=email)
+        print('HERE')
+        new_voter = models.Voters(name=name, email=email)
+        print('Here2')
         db.session.add(new_voter)
         db.session.commit()
-    except: 
-        return jsonify({}), 500
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
 
+        printf('Here3')
     if not nominees:
         return jsonify({}), 400
     for n in nominees:
