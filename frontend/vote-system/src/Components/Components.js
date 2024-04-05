@@ -9,9 +9,9 @@ const Header = () =>
            <img style={HeaderStyle.logo} src={logo}></img>
            <p style={HeaderStyle.heading}>{title}</p>
            <nav style={HeaderStyle.menu} className='headerMenu'>
-                <button>HOME</button>
-                <button >ABOUT</button>
-                <button >CREATE</button>
+                <button onClick={() => window.location.href = '/'}>HOME</button>
+                <button onClick={() => window.location.href = '/about'}>ABOUT</button>
+                <button onClick={() => window.location.href = ''}>CREATE</button>
                 <button >RESULTS</button>
            </nav>
         </header>

@@ -34,71 +34,12 @@ def create_election():
 
     return jsonify({"message": "Election created!"}), 201
 
-<<<<<<< HEAD
-@app.route('/api/elections/create', methods=["POST"])
-def submit_election():
-    name = request.json.get('name')
-    description = request.json.get('description')
-    startTime = request.json.get('startTime')
-    finishTime = request.json.get('finishTime')
-    positions = request.json.get('positions')
-    showResults = request.json.get('showResults')
-    print(showResults)
-
-    if (not (name and startTime and finishTime and positions and description)):
-        return jsonify({"error": "Missing start time, finish time, positions, description or name"}), 401
-    
-    startHour = int(startTime[:2])
-    finishHour = int(finishTime[:2])
-    startMin = int(startTime[3:])
-    finishMin = int(startTime[3:])
-
-    today = datetime.datetime.now()
-
-    startTime = datetime.datetime(today.year, today.month, today.day, startHour, startMin)
-    finishTime = datetime.datetime(today.year, today.month, today.day, finishHour, finishMin)
-
-    try:
-        new_election = models.Election(name = name, description = description, start_time = startTime, end_time = finishTime, show_results = showResults)
-        db.session.add(new_election)
-        db.session.commit()
-        election_id = new_election.election_id
-    
-    except Exception as e:
-        return jsonify({"message": str(e)}), 500
-
-
-    try:
-        for pos in positions:
-            new_position = models.Position(name = pos['name'], election_id=election_id)
-            db.session.add(new_position)
-            db.session.commit()
-            for name in pos['candidates']:
-                new_nominee = models.Nominee(name=name, position_id=new_position.position_id)
-                db.session.add(new_nominee)
-        db.session.commit()
-    except Exception as e:
-        return jsonify({"message": str(e)}), 500
-
-    return jsonify({}), 201
-
-@app.route('/api/votes/submit', methods=["POST"])
-def submit_vote2():
-    position_id = request.json.get('position_id')
-    voter_id = request.json.get('voter_id')
-    positions = request.json.get('positions')
-
-    return jsonify({}), 201
-
-
-=======
 #GET ELECTION
 @app.route('/get_election', methods = ["GET"])
 def get_election():
     election_id = request.args.get('election_id')
     election = models.Election.query.get(election_id)
     return jsonify({"election": election.to_json()})
->>>>>>> 65fc23bc264943849e95a9371fb0b7464b408a57
 
 #DELETE ELECTION
 @app.route('/delete_election/<int:election_id>', methods = ["DELETE"])
