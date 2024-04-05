@@ -13,7 +13,7 @@ const HomePage = () =>
             <div style={HomePageStyle.heroWrapper}>    
                 <img style={HomePageStyle.hero} src={hero}></img>
                 <div style={HomePageStyle.heroContentWrapper}>
-                    <h1 style={HomePageStyle.heroHeading}>Heading text i'll add later</h1>
+                    <h1 style={HomePageStyle.heroHeading}>Get your elections done, easy.</h1>
                     <input placeholder="join code" style={HomePageStyle.joinCodeInput}></input>
                     <button style={HomePageStyle.joinButton}>JOIN</button>
                     <p style={HomePageStyle.orText}>Or,</p>
@@ -21,9 +21,9 @@ const HomePage = () =>
                 </div>
             </div>
             <h2>About</h2>
-            <AboutItem heading={'Impartial'} text={'Sample text'} picture={impartial}/>
-            <AboutItem heading={'Consistent'} text={'Sample text'} picture={consistent}/>
-            <AboutItem heading={'Easy'} text={'Sample text'} picture={easy}/>
+            <AboutItem heading={'Impartial'} text={'We provide centralised, fully automated election processes for clubs and student unions. As we handle everything programatically, there is no potential for corruption in our services. Votes are carefully verified, and de-identified.'} picture={impartial}/>
+            <AboutItem heading={'Consistent'} text={'Having a centralised process all university clubs in an institution share for their elections ensures fairness and that everyone knows what to expect.'} picture={consistent}/>
+            <AboutItem heading={'Easy'} text={'Elections are a hassle. We expose our API endpoints so elections can be seamlessly integrated into existing systems used to book AGMs'} picture={easy}/>
             <Footer />
         </div>
     )

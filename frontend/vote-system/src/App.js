@@ -8,6 +8,7 @@ import { HomePage } from './Pages/Home';
 import { CreatePage } from './Pages/Create';
 import Voting from './Pages/Voting';
 import { ResultsPage } from './Pages/Results';
+import { DisplayPage } from './Pages/Display';
 
 function App() {
 
@@ -31,6 +32,10 @@ function App() {
     {
       path: '/results',
       element: <ResultsPage />
+    },
+    {
+      path: '/display/:id',
+      element: <DisplayPage />
     }
   ])
 
