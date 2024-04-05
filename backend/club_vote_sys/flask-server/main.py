@@ -6,6 +6,7 @@ from flask_cors import CORS
 from config import app, db
 import models
 import datetime
+from email_service.email_server import send_email
 
 #CREATE ELECTION <-- (get clubs database)
 @app.route('/create_election', methods=["POST"])
@@ -88,6 +89,8 @@ def create_voter():
     try:
         db.session.add(new_voter)
         db.session.commit()
+        #SEND VERIFICATION EMAIL HERE AND CALL update_voter
+        send_email(new_voter.email, f'http://localhost:5000/update_voter/{new_voter.voter_id}')
     except Exception as e:
         return jsonify({"message": str(e)}), 400
 
