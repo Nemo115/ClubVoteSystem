@@ -290,36 +290,17 @@ def submit_election():
     return jsonify({"election_id": id}), 201
 
 ## <-------THIS FUNCTION WAS PREVIOUSLY CALLED submit_vote2()-------->
-def submit_vote_data(position_id, voter_id, preference_list):
-    if not (position_id and voter_id and preference_list):
-        return jsonify({"error": "missing position_id, voter_id or preference_list"})
-    
-    numvotes = len(preference_list)
-
-    try:
-        for i in range(numvotes):
-            print(preference_list[i])
-            new_vote = models.Vote(position_id=position_id, rank=i + 1, score=preference_list[i]['score'])
-            db.session.add(new_vote)
-        db.session.commit()
-    
-    except Exception as e:
-        return jsonify({"message": str(e)}), 500
-
-    print(("SUBMITTED VOTE")+("="*20))
-
-    return jsonify({}), 201
 
 @app.route('/api/votes/submit', methods=["POST"])
 def submit_vote():
     nominees = request.json.get('nominees')
     name = request.json.get('name')
     email = request.json.get('email')
+    nomineesOrganised = []
+    currentPosition = []
 
     try:
-        print('HERE')
         new_voter = models.Voters(name=name, email=email)
-        print('Here2')
         db.session.add(new_voter)
         db.session.commit()
     except Exception as e:
@@ -328,7 +309,31 @@ def submit_vote():
     if not nominees:
         return jsonify({}), 400
     for n in nominees:
-        submit_vote_data(n['position_id'], new_voter.voter_id, n)
+        if currentPosition == [] or currentPosition[-1]['positionID'] == n['positionID']:
+            currentPosition.append(n)
+        else:
+            nomineesOrganised.append(currentPosition)
+            currentPosition = [n]
+    nomineesOrganised.append(currentPosition)
+    try:
+        for n in nomineesOrganised:
+            voteCount = len(n)
+            for i in range(voteCount):
+                print(i)
+                print(n[i])
+                new_vote = models.Vote(position_id=n[i]['positionID'], nominee_id=n[i]['nomineeID'], rank=i + 1, score=n[i]['score'])
+                db.session.add(new_vote)        
+        db.session.commit()
+
+
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+
+    #submit_vote_data(n['positionID'], new_voter.voter_id, n)
+
+        
+    
+    return jsonify({}), 201
 
 #@app.route('/create_vote', method = ["GET", "POST"])
 #def sub
