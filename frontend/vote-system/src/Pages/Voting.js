@@ -24,7 +24,7 @@ export default function Voting() {
         method: 'GET',
     };
 
-    fetch(url_get + code, requestOptions)
+    fetch(url_get + '?election_id=' + code, requestOptions)
     .then(response => {
         if (!response.ok) {
             throw new Error("Network response not ok");
