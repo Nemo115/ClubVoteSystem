@@ -5,7 +5,7 @@ import { themeHighlight } from '../constants';
 
 export default function Voting() {
     // Getting code from URL
-    const url_get = 'http://localhost:5000/get_nominees/'
+    const url_get = 'http://localhost:5000/get_nominee_s/'
     const url_post = 'http://localhost:5000/create_voter/'
     const searchParams = new URLSearchParams(window.location.search);
     const code = searchParams.get('code')
@@ -24,7 +24,7 @@ export default function Voting() {
         method: 'GET',
     };
 
-    fetch(url_get + code, requestOptions)
+    fetch(url_get + '?election_id=' + code, requestOptions)
     .then(response => {
         if (!response.ok) {
             throw new Error("Network response not ok");

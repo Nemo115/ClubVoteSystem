@@ -19,7 +19,6 @@ class Election(db.Model):
             "electionID":self.election_id,
             "name": self.name,
             "description": self.description,
-            "electionCode":self.election_code,
             "startTime":self.start_time,
             "endTime":self.end_time,
             "showResults":self.show_results
@@ -44,6 +43,7 @@ class Nominee(db.Model):
     position_id = db.Column(db.Integer, db.ForeignKey('Position.position_id'))
     email = db.Column(db.String(45))
     score = db.Column(db.Integer)
+    election_id = db.Column(db.Integer, db.ForeignKey('Election.election_id'))
 
     def to_json(self):
         return {
@@ -51,7 +51,8 @@ class Nominee(db.Model):
             "name": self.name,
             "positionID": self.position_id,
             "email": self.email,
-            "score": self.score
+            "score": self.score,
+            "electionID": self.election_id
         }
 
 class Voters(db.Model):
