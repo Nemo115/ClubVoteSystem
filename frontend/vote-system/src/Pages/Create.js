@@ -1,37 +1,50 @@
 import { useState } from "react"
 import { themeHighlight } from "../constants"
-
+import axios from 'axios'
 
 
 const CreatePage = () => {
-    const [candidates, setCandidates] = useState([]);
-    const [name, setName] = useState('');
-    const [candidatesExpanded, setCandidatesExpanded] = useState(true)
+    const [description, setDescription] = useState('')
     const [showResults, setShowResults] = useState(true)
     const [startTime, setStartTime] = useState('--:--')
     const [finishTime, setFinishTime] = useState('--:--')
+    const [positions, setPositions] = useState([])
 
-    const addName = () => {
-        if (name === '')
-        {
-            return;
-        }
-        setCandidates(candidates.concat([name]))
-        setName('')
+    const handleSubmit = () => {
+        axios({
+            method: 'POST',
+            url: 'http://backend.com',
+            data: {
+                name: description,
+                startTime,
+                finishTime,
+                showResults,
+                positions,
+            }
+        }).then(res => {
+
+        }).catch(err => {
+            console.log(err)
+        })
+    } 
+
+    const addPosition = (position) => {
+        setPositions(positions.concat({name: position, candidates: []}))
     }
-    const nameOnKeydown = e => {
-        if(e.key === 'Enter')
-        {
-            addName()
-        }
-    }
-    const handleDeleteName = (e, index) => {
-        console.log(index)
-        var tmp = candidates.slice()
+    const deletePosition = (index) => {
+        var tmp = positions.slice()
         tmp.splice(index, 1)
-        console.log(tmp)
-        setCandidates(tmp)
-
+        setPositions(tmp)
+    }
+    const deleteCandidate = (positionIndex, candidateIndex) => {
+        var tmp = positions.slice()
+        tmp[positionIndex].candidates.splice(candidateIndex, 1)
+        setPositions(tmp)
+    }
+    const addCandidate = (candidate, positionIndex) => {
+        var tmp = positions.slice()
+        tmp[positionIndex].candidates = tmp[positionIndex].candidates.concat(candidate)
+        setPositions(tmp)
     }
 
 
@@ -52,7 +65,10 @@ const CreatePage = () => {
             <div style={CreatePageStyle.optionItem}>
                 <p style={CreatePageStyle.optionsCategoryLeft}>Start time:</p>
                 <input style={CreatePageStyle.optionsCategoryRight} type="time" value={startTime} onChange={e => setStartTime(e.target.value)}></input>
-
+            </div>            
+            <div style={CreatePageStyle.optionItem}>
+                <p style={CreatePageStyle.optionsCategoryLeft}>Description: </p>
+                <input style={CreatePageStyle.optionsCategoryRight} value={description} onChange={e => setDescription(e.target.value)}></input>
             </div>            
             <div style={CreatePageStyle.optionItem}>
                 <p style={CreatePageStyle.optionsCategoryLeft}>End time:</p>
@@ -61,32 +77,76 @@ const CreatePage = () => {
             <div style={CreatePageStyle.optionItem}>
                 <p>Show results:</p>
                 <input type="checkbox" checked={showResults} onChange={() => setShowResults(!showResults)}></input>
-            </div>  
-            <div style={CreatePageStyle.candidatesWrapper}>
-                <div style={CreatePageStyle.candidatesHeader}>
-                    <div style={CreatePageStyle.headerLeft}>
-                        <h2 style={CreatePageStyle.candidatesHeaderHeading}>Candidates</h2>
-                        <div style={CreatePageStyle.addCandidate}>
-                        <input placeholder={'Candidate name'} onKeyDown={nameOnKeydown} value={name} onChange={e => setName(e.target.value)} style={CreatePageStyle.nameInput}></input>
-                        <button style={CreatePageStyle.smallIconButton} onClick={() => addName()}>add_circle</button>
-                        </div>
+            </div>
+
+            <ComplexField name={'positions'} fields={positions.map(p => p.name)} addField={addPosition} deleteField={deletePosition}/>
+
+            {
+                positions.map((position, i) => {
+                    return (
+                        <ComplexField 
+                            key={i} 
+                            name={position.name} 
+                            fields={position.candidates} 
+                            addField={candidate => addCandidate(candidate, i)} 
+                            deleteField={index => deleteCandidate(i, index)}
+                        />
+                    )
+                })
+            }
+
+            <button style={CreatePageStyle.submitButton} onClick={() => handleSubmit()}>SUBMIT</button>
+        </div>
+    )
+}
+
+
+const ComplexField = ({name, fields, addField, deleteField}) => {
+
+    const [expanded, setExpanded] = useState(true)
+    const [field, setField] = useState('')
+
+
+    const addFieldInner = () => {
+        if (field === '')
+        {
+            return;
+        }
+        addField(field)
+        setField('')
+    }
+
+    const fieldOnKeydown = e => {
+        if(e.key === 'Enter')
+        {
+            addFieldInner()
+        }
+    }
+
+    return (
+        <div style={CreatePageStyle.candidatesWrapper}>
+            <div style={CreatePageStyle.candidatesHeader}>
+                <div style={CreatePageStyle.headerLeft}>
+                    <h2 style={CreatePageStyle.candidatesHeaderHeading}>{name}</h2>
+                    <div style={CreatePageStyle.addCandidate}>
+                    <input placeholder={name} onKeyDown={fieldOnKeydown} value={field} onChange={e => setField(e.target.value)} style={CreatePageStyle.nameInput}></input>
+                    <button style={CreatePageStyle.smallIconButton} onClick={() => addFieldInner()}>add_circle</button>
                     </div>
-                    <button style={CreatePageStyle.iconButton} onClick={() => setCandidatesExpanded(!candidatesExpanded)}>{candidatesExpanded ? 'expand_less' : 'expand_more'}</button>
                 </div>
-                <div style={candidatesExpanded ? CreatePageStyle.candidatesNameDisplayShown : CreatePageStyle.candidatesNameDisplayHidden}>
-                {
-                    candidates.map((c, i) => {
-                        return (
-                            <div key={i} style={CreatePageStyle.candidateNameWrapper}>
-                                <p style={CreatePageStyle.candidateName}>{c}</p>
-                                <button style={CreatePageStyle.trashCandidate} onClick={e => handleDeleteName(e, i)}>delete</button>
-                            </div>
-                        )
-                    })
-                }
-                </div>
-            </div>          
-            <button style={CreatePageStyle.submitButton}>SUBMIT</button>
+                <button style={CreatePageStyle.iconButton} onClick={() => setExpanded(!expanded)}>{expanded ? 'expand_less' : 'expand_more'}</button>
+            </div>
+            <div style={expanded ? CreatePageStyle.candidatesNameDisplayShown : CreatePageStyle.candidatesNameDisplayHidden}>
+            {
+                fields.map((c, i) => {
+                    return (
+                        <div key={i} style={CreatePageStyle.candidateNameWrapper}>
+                            <p style={CreatePageStyle.candidateName}>{c}</p>
+                            <button style={CreatePageStyle.trashCandidate} onClick={e => deleteField(i)}>delete</button>
+                        </div>
+                    )
+                })
+            }
+            </div>
         </div>
     )
 }
