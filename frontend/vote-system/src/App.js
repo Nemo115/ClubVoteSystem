@@ -17,10 +17,6 @@ function App() {
       element: <HomePage />
     },
     {
-      path: '/join',
-      element: <Join />
-    },
-    {
       path: '/create',
       element: <CreatePage />
     },

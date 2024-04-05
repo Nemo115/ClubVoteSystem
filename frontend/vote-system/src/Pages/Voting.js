@@ -5,17 +5,26 @@ import { themeHighlight } from '../constants';
 
 export default function Voting() {
     // Getting code from URL
-    const url = ('http://localhost:5000')
+    const url_get = 'http://localhost:5000/get_nominees/'
+    const url_post = 'http://localhost:5000/create_voter/'
     const searchParams = new URLSearchParams(window.location.search);
     const code = searchParams.get('code')
 
+    // Defining useStates
     const [nominees, setNominees] = useState([])
+    var [text, setText] = useState('');
+    const [formData, setForm] = useState({
+        name: '',
+        email: '',
+        studentId: ''
+    });
 
+    // Fetching Nominee Data
     const requestOptions = {
         method: 'GET',
     };
 
-    fetch(url + '/code', requestOptions)
+    fetch(url_get, requestOptions)
     .then(response => {
         if (!response.ok) {
             throw new Error("Network response not ok");
@@ -27,6 +36,7 @@ export default function Voting() {
         console.error('Error', error);
     })
 
+    // Get positions
     var positions = []
     for (let i=0;i<nominees.length;i++) {
         if (!positions.includes(nominees[i].position)) {
@@ -36,6 +46,14 @@ export default function Voting() {
 
     const dragPerson = useRef(0)
     const draggedOverPerson = useRef(0)
+
+    const changeForm = (e) => {
+        const {name, value} = e.target;
+        setForm(prevState => ({
+            ...prevState, 
+            [name]: value
+        }));
+    }
 
     function handleSort() {
         const nomineesClone = [...nominees]
@@ -48,6 +66,7 @@ export default function Voting() {
     }
 
     function submit() {
+        // Compiling nominee scores
         var return_nominees = [...nominees]
         for (let i=0;i<positions.length;i++) {
             var candidates_in_position = []
@@ -70,12 +89,39 @@ export default function Voting() {
             });
         }
         // Update this with POST to API Later
-        console.log(return_nominees);
+
+        // Compiling final information for submission
+        var return_vote = {...formData };
+        return_vote.nominees = return_nominees;
+
+        console.log(return_vote);
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(return_vote)
+        };
+        fetch(url_post, requestOptions).then(response => response.json());
     }
   return (
     <div>
-        <h2>Voting Process</h2>
-        <div className='text-x1 font-bold mt-4'>
+        <h2>Enter Information</h2>
+        <div style={formContainerStyle}>
+            <label htmlFor="" style={formStyle.label}>
+                Name:
+                <input style={formStyle.input} name="name" type="text" value={formData.name} onChange={changeForm}/>
+            </label>
+            <label htmlFor="" style={formStyle.label}>
+                Email:
+                <input style={formStyle.input} name="email" type="text" value={formData.email} onChange={changeForm}/>
+            </label>
+            <label htmlFor="" style={formStyle.label}>
+                Student ID:
+                <input style={formStyle.input} name= "studentId" type="text" value={formData.studentId} onChange={changeForm}/>
+            </label>
+        </div>
+        <h2>Vote for Candidates</h2>
+        <div className='candidates-list'>
             {positions.map((position, index) => (
                 <div>
                     <h1>{position}</h1>
@@ -94,9 +140,8 @@ export default function Voting() {
                 </div>
             ))}
         </div>
-        <input type="submit" style={formStyle.submitButton} onClick={submit}/>
+        <input type="submit" style={formStyle.submit} onClick={submit}/>
     </div>
-    
   )
 }
 
@@ -108,6 +153,19 @@ const listStyle = {
 const checkBoxstyle = {
     width: "1rem",
     height: "1rem"
+}
+
+const styles = {
+    container: {
+        backgroundColor: themeBackground,
+    }
+};
+
+const formContainerStyle = {
+    margin: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
 }
 
 const formStyle = {
@@ -124,13 +182,16 @@ const formStyle = {
         wdith: '100%',
         fontSize: '20px'
     },
-    submitButton: {
+    submit: {
         backgroundColor: themeHighlight,
+        height: '2.5rem',
+        border: 0,
+        outline: 0,
+        border: '0.05rem solid white',
+        borderRadius: '0.2rem',
+        fontSize: '1rem',
         color: 'white',
-        fontSize: '1.5rem',
-        padding: '0.5rem',
-        width: '100%',
-        borderRadius: '0.5rem',
-        marginTop: '1rem',
-    },
+        fontFamily: 'Roboto',
+        width: '50%',
+    }
 }
