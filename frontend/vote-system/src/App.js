@@ -29,6 +29,10 @@ function App() {
       element: <Voting />
     },
     {
+      path: '/results/:id',
+      element: <ResultsPage />
+    },
+    {
       path: '/results',
       element: <ResultsPage />
     }

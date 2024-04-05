@@ -1,12 +1,54 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import waitingRobot from '../assets/robot_waiting.png'
+import axios from 'axios'
+import { BACKEND_URL } from '../constants'
+import { useParams } from 'react-router-dom'
 
 const ResultsPage = () => {
-    const [finished, setFinished] = useState(true) 
+    const [finished, setFinished] = useState(false) 
+    const [idPresent, setIdPresent] = useState(true)
+    const [refreshBool ,setRefreshBool] = useState(false)
+
+    const {id} = useParams()
+
+    useEffect(() => {
+        if (id)
+        {
+            console.log(id)
+            axios({
+                method: 'GET',
+                url: `${BACKEND_URL}/election/isFinished`,
+                data: {
+                    electionId: id
+                }
+            }).then(res => {
+                if (res.data.finished === true)
+                {
+                    setFinished(true)
+                }
+                else {
+                    setTimeout(() => {
+                        setRefreshBool(!refreshBool)
+                    }, 1000)
+                }
+            }).catch(err => {
+                console.log(err)
+                setTimeout(() => {
+                    setRefreshBool(!refreshBool)
+                }, 1000)
+            })
+
+        } else {
+            setIdPresent(false)
+        }
+    }, [refreshBool])
+
+
     return (
         <div>
         {
-            finished ? <ResultsPageFinished /> : <ResultsPageUnfinished />
+            idPresent ? finished ? <ResultsPageFinished /> : <ResultsPageUnfinished />
+            : <ResultsPageNoID />
         }
         </div>
     )
@@ -20,6 +62,16 @@ const ResultsPageUnfinished = () => {
             <img style={ResultsPageUnfinishedStyle.image} src={waitingRobot}></img>
             <h2>This election hasn't finished yet</h2>
             <p>Results will appear on this page as soon as they'r ready.</p>
+        </div>
+    )
+}
+const ResultsPageNoID = () => {
+    const [id, setID] = useState('')
+    return (
+        <div style={ResultsPageUnfinishedStyle.container}>
+            <h1>Please enter election id</h1>
+            <input value={id} onChange={e => setID(e.target.value)}></input>
+            <button onClick={() => window.location.href=`/results/${id}`}>SUBMIT</button>
         </div>
     )
 }
