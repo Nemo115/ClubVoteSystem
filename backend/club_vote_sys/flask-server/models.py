@@ -76,6 +76,7 @@ class Voters(db.Model):
 class Vote(db.Model):
     __tablename__ = 'Vote'
     vote_id = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    voter_id = db.Column(db.Integer, db.ForeignKey('Voters.voter_id'))
     position_id = db.Column(db.Integer, db.ForeignKey('Position.position_id'))
     nominee_id = db.Column(db.Integer, db.ForeignKey('Nominee.nominee_id'))
     rank = db.Column(db.Integer)

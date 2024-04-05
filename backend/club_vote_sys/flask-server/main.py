@@ -324,7 +324,7 @@ def submit_vote():
             for i in range(voteCount):
                 print(i)
                 print(n[i])
-                new_vote = models.Vote(position_id=n[i]['positionID'], nominee_id=n[i]['nomineeID'], rank=i + 1, score=n[i]['score'])
+                new_vote = models.Vote(position_id=n[i]['positionID'], nominee_id=n[i]['nomineeID'], rank=i + 1, score=n[i]['score'], voter_id=new_voter.voter_id)
                 db.session.add(new_vote)        
         db.session.commit()
 
@@ -339,7 +339,7 @@ def submit_vote():
     return jsonify({}), 201
 
 
-@app.route('/api/election/isFinished')
+@app.route('/api/election/isFinished', methods=["GET"])
 def is_finished():
     election_id = request.args.get('electionId')
 
@@ -348,6 +348,98 @@ def is_finished():
     now = datetime.datetime.now()
 
     return jsonify({"finished": end_time < now}), 200
+
+
+def get_key(dic, val):
+    for key, value in dic.items():
+        if value == val:
+            return key
+
+
+def print2(arr):
+    for a in arr:
+        print(a)
+
+def get_position_result(position_id):
+
+    votes = models.Vote.query.filter_by(position_id=str(position_id)).all()
+    big_votes = []
+    current_vote = []
+    vote_tally = {}
+    for i in range(len(votes)):
+        vote_tally[str(votes[i].nominee_id)] = 0
+        if current_vote == [] or votes[i].voter_id == current_vote[-1]['voter_id']:
+            current_vote.append({'voter_id': votes[i].voter_id, 'nominee_id': votes[i].nominee_id, 'rank': votes[i].rank})
+        else:
+            big_votes.append(current_vote)
+            current_vote = [{'voter_id': votes[i].voter_id, 'nominee_id': votes[i].nominee_id, 'rank': votes[i].rank}]
+    big_votes.append(current_vote)
+    vote_count = len(big_votes)
+    #print('VOTE COUNT')
+    #print(vote_count)
+    #print2(big_votes)
+    #print(vote_tally)
+    for i in range(len(big_votes)):
+        key = str(big_votes[i][0]['nominee_id'])
+        #print(key)
+        vote_tally[key] += 1
+    #print(vote_tally)
+
+    while max(vote_tally.values()) <= vote_count / 2:
+        to_remove = get_key(vote_tally, min(vote_tally.values()))
+        #print('VOTE TALLY')
+        #print(vote_tally)
+        #print('BIG VOTES')
+        #print2(big_votes)
+        #print('REMOVING ', to_remove)
+        del vote_tally[to_remove]
+
+        for vote in big_votes:
+            for mini_vote in vote:
+                if (mini_vote['nominee_id'] == int(to_remove)):
+                    mini_vote['nominee_id'] = -1
+        #print('BIG VOTES AFTER')
+        #print2(big_votes)
+
+        # reset tally
+        key_list = vote_tally.keys()
+        for key in key_list:
+            vote_tally[key] = 0
+        # recount votes
+
+        for vote in big_votes:
+            for mini_vote in vote:
+                if (mini_vote['nominee_id'] != -1):
+                    vote_tally[str(mini_vote['nominee_id'])] = vote_tally[str(mini_vote['nominee_id'])] + 1
+                    break
+        #print('VOTES AFTER')
+        #print(vote_tally)
+    #print(vote_tally)
+
+    return {'nominee_id': get_key(vote_tally, max(vote_tally.values())), 'votes': max(vote_tally.values()), 'total_votes': vote_count}
+
+
+@app.route('/api/election/results', methods=["GET"])
+def get_final_results():
+    results = []
+    total_votes = 0
+    election_id = request.args.get('electionId')
+    election = models.Election.query.get(election_id)
+    positions = models.Position.query.filter_by(election_id=str(election_id)).all()
+    print(positions)
+    for p in positions:
+        winner = get_position_result(p.position_id)
+        total_votes = winner['total_votes']
+        winner_nominee = models.Nominee.query.get(int(winner['nominee_id']))
+        results.append({'position': p.name, 'name': winner_nominee.name, 'votes': winner['votes']})
+
+    date = election.start_time.strftime("%d %b %Y")
+
+    print(results)
+
+
+
+    return jsonify({"date": date, "voteCount": total_votes, "positions": results, "voteId": election_id}), 200
 
 
 #@app.route('/create_vote', method = ["GET", "POST"])

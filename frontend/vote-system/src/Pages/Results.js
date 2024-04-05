@@ -47,7 +47,7 @@ const ResultsPage = () => {
     return (
         <div>
         {
-            idPresent ? finished ? <ResultsPageFinished /> : <ResultsPageUnfinished />
+            idPresent ? finished ? <ResultsPageFinished electionId={id} /> : <ResultsPageUnfinished />
             : <ResultsPageNoID />
         }
         </div>
@@ -76,11 +76,26 @@ const ResultsPageNoID = () => {
     )
 }
 
-const ResultsPageFinished = () => {
+const ResultsPageFinished = ({ electionId }) => {
     const [date, setDate] = useState('Jan 24th')
     const [voteCount, setVoteCount] = useState(100)
     const [positions, setPositions] = useState([{position: 'Secretary', name: 'Chris Jerry', votes: 12}, {position: 'President', name: 'Jerry Bumpkis', votes: 15}])
     const [voteId, setVoteId] = useState(123482)
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: `${BACKEND_URL}/election/results?electionId=${electionId}`
+        }).then(res => {
+            setDate(res.data.date)
+            setVoteCount(res.data.voteCount)
+            setPositions(res.data.positions)
+            setVoteId(res.data.voteId)
+        }).catch(err => {
+            
+        })
+    }, [])
+
     return (
         <div style={ResultsPageFinishedStyle.wrapper}>
             <h1>Results</h1>
@@ -105,7 +120,7 @@ const ResultsPageFinished = () => {
                     </div>
                 )
             })}
-            <h2>Vote ID: {voteId}</h2>
+            <h2>Election ID: {voteId}</h2>
             <p></p>
         </div>
     )
