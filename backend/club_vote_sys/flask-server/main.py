@@ -35,7 +35,7 @@ def create_election():
     return jsonify({"message": "Election created!"}), 201
 
 @app.route('/api/elections/create', methods=["POST"])
-def create_election2():
+def submit_election():
     name = request.json.get('name')
     description = request.json.get('description')
     startTime = request.json.get('startTime')
@@ -80,6 +80,15 @@ def create_election2():
         return jsonify({"message": str(e)}), 500
 
     return jsonify({}), 201
+
+@app.route('/api/votes/submit', methods=["POST"])
+def submit_vote2():
+    position_id = request.json.get('position_id')
+    voter_id = request.json.get('voter_id')
+    positions = request.json.get('positions')
+
+    return jsonify({}), 201
+
 
 
 #DELETE ELECTION
