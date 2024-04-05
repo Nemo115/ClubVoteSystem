@@ -42,8 +42,6 @@ def create_election2():
     if(not (name and startTime and finishTime and positions)):
         return jsonify({"error": "Missing start time, finish time, positions or name"}), 401
 
-    
-
     return jsonify({}), 201
 
 
