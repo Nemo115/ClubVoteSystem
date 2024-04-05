@@ -260,6 +260,17 @@ def submit_election():
 
     return jsonify({new_election.election_id}), 201
 
+@app.route('/api/votes/submit', methods=["POST"])
+def submit_vote2():
+    position_id = request.json.get('position_id')
+    voter_id = request.json.get('voter_id')
+    preference_list = request.json.get('preference_list')
+
+    if not (position_id and voter_id and preference_list):
+        return jsonify({"error": "missing position_id, voter_id or preference_list"})
+    
+    
+
 #@app.route('/create_vote', method = ["GET", "POST"])
 #def sub
 
