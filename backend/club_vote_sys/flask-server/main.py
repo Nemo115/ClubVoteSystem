@@ -79,8 +79,6 @@ def create_election2():
     except Exception as e:
         return jsonify({"message": str(e)}), 500
 
-    
-
     return jsonify({}), 201
 
 
