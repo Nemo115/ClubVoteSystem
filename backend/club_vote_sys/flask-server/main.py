@@ -70,6 +70,7 @@ def create_voter():
     except Exception as e:
         return jsonify({"message": str(e)}), 400
 
+    print(new_voter)
     return jsonify({"message": "Voter registered!"}), 201
 
 #UPDATE VOTER (verify email) (Send the user a link with voter id already inserted)
@@ -200,6 +201,10 @@ def delist_club(club_id):
 def get_club(club_id):
     club_search = models.Clubs.query.get(club_id)
     return jsonify(club_search), 200
+
+@app.route('/')
+def home():
+    return 'hello'
 
 if __name__ == "__main__":
     db.create_all()
