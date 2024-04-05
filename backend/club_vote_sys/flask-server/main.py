@@ -14,7 +14,7 @@ def create_election():
     name = request.json.get('name')
     description = request.json.get('description')
     start_time = request.json.get('startTime')
-    end_time = request.json.get('endTime')
+    end_time = request.json.get('finishTime')
     show_results = request.json.get('showResults')
 
     #club_id = request.json.get('clubID')#OPTIONAL IF TIME ALLOWS
@@ -33,7 +33,8 @@ def create_election():
     except Exception as e:
         return jsonify({"message": str(e)}), 400
 
-    return jsonify({"message": "Election created!"}), 201
+    #return jsonify({"message": "Election created!"}), 201
+    return new_election
 
 #GET ELECTION
 @app.route('/get_election', methods = ["GET"])
@@ -236,6 +237,7 @@ def get_all_clubs():
 #PAGE SUBMITS
 @app.route('/api/elections/create', methods=["POST"])
 def submit_election():
+    new_election = create_election()
     name = request.json.get('name')
     description = request.json.get('description')
     startTime = request.json.get('startTime')
