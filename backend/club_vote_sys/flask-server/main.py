@@ -44,7 +44,10 @@ def get_election():
     nominees = models.Nominee.query.filter(models.Nominee.election_id == election_id).all()
     return_nominees = []
     for nominee in nominees:
-        return_nominees.append(nominee.to_json())
+        position = models.Position.query.get(nominee.position_id)
+        nominee = nominee.to_json()
+        nominee["position"] = position.name
+        return_nominees.append(nominee)
     
     return jsonify({"election": election.to_json(), "nominees": return_nominees})
 
