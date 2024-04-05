@@ -11,18 +11,19 @@ import models
 def create_election():
     name = request.json.get('name')
     description = request.json.get('description')
-    election_code = request.json.get('electionCode')
     start_time = request.json.get('startTime')
     end_time = request.json.get('endTime')
-    club_id = request.json.get('clubID')
+    show_results = request.json.get('showResults')
+
+    #club_id = request.json.get('clubID')#OPTIONAL IF TIME ALLOWS
     
-    if not (name or election_code or start_time or end_time):
+    if not (name or start_time or end_time):
         return (
             jsonify({"message": "Missing name, election code, start time or end time"}),
             400,
         )
 
-    new_election = models.Election(name = name, description = description, election_code = election_code, start_time = start_time, end_time = end_time, club_id = club_id)
+    new_election = models.Election(name = name, description = description, start_time = start_time, end_time = end_time, show_results = show_results)
 
     try:
         db.session.add(new_election)
@@ -48,8 +49,11 @@ def delete_election(election_id):
 #CREATE VOTER
 @app.route('/create_voter', methods=["POST", "GET"])
 def create_voter():
-    verified_status = False
+    name = request.json.get('name')
     email = request.json.get('email')
+    verified_status = False
+    election_id = request.json.get('electionID')
+
     print(request.json)
     if not email:
         return (
@@ -64,7 +68,7 @@ def create_voter():
             400,
         )'''
 
-    new_voter = models.Voters(email = email, verified_status = verified_status)
+    new_voter = models.Voters(name = name, email = email, verified_status = verified_status, election_id = election_id)
 
     try:
         db.session.add(new_voter)
@@ -94,34 +98,10 @@ def get_voters():
     voter_query = models.Voters.query.all()
     json_voters = list(map(lambda x: x.to_json(), voter_query))
     return jsonify({"voters":json_voters})
-
+'''
 #CREATE VOTE (Possibly merge with create voter)
 @app.route('/create_vote/<int:voter_id>', methods = ["POST"])
 def create_vote():
-    '''verified_status = False
-    email = request.json.get('email')
-    
-    if not email:
-        return (
-            jsonify({"message": "Missing email"}),
-            400,
-        )
-    at_index = email.find('@')
-    if email[at_index:] != '@student.unimelb.edu.au':
-        return (
-            jsonify({"message": "Invalid Email. Must be melbourne uni email"}),
-            400,
-        )
-
-    new_voter = models.Voters(email = email)
-
-    try:
-        db.session.add(new_voter)
-        db.session.commit()
-    except Exception as e:
-        return jsonify({"message": str(e)}), 400
-
-    return jsonify({"message": "Voter registered!"}), 201'''
     pass
 
 #DELETE VOTE
@@ -136,7 +116,7 @@ def delete_vote(vote_id):
     db.session.commit()
 
     return jsonify({"message": "Vote deleted!"}), 200
-
+'''
 #CREATE NOMINEE
 @app.route('/create_nominee', methods = ["POST"])
 def create_nominee():
@@ -159,11 +139,14 @@ def create_nominee():
     return jsonify({"message": "Nominee created!"}), 201
 
 #GET NOMINEES
-@app.route('/get_nominees', methods = ["GET"])
+@app.route('/get_nominee', methods = ["GET"])
 def get_nominees():
-    nominees = models.Nominees.query.all()
-    json_contacts = list(map(lambda x: x.to_json(), nominees))
-    return jsonify({"nominees": nominees})
+    nominee = models.Nominee.query.all()
+    json_nominee = list(map(lambda x: x.to_json(), nominee))
+    return jsonify({"nominees": json_nominee})
+
+#UPDATE NOMINEE
+@app.route('/update_nominee')
 
 #DELETE NOMINEE
 @app.route('/delete_nominee/<int:nominee_id>', methods = ["DELETE"])
@@ -178,6 +161,9 @@ def delete_nominee(nominee_id):
 
     return jsonify({"message": "Nominee Deleted!"}), 200
 
+
+#SPARE CODE FOR CLUB TABLE IN FUTURE
+'''
 #REGISTER CLUB (Only in admin pages)
 @app.route('/register_club', methods = ["POST"])
 def register_club():
@@ -210,6 +196,7 @@ def get_all_clubs():
     clubs = models.Clubs.query.all()
     json_contacts = list(map(lambda x: x.to_json(), clubs))
     return jsonify({"clubs": clubs})
+'''
 
 #default page for looking at sql database values
 @app.route('/')
