@@ -39,7 +39,14 @@ def create_election():
 def get_election():
     election_id = request.args.get('election_id')
     election = models.Election.query.get(election_id)
-    return jsonify({"election": election.to_json()})
+    nominees = models.Nominee.query.all()
+
+    nominees = models.Nominee.query.filter(models.Nominee.election_id == election_id).all()
+    return_nominees = []
+    for nominee in nominees:
+        return_nominees.append(nominee.to_json())
+    
+    return jsonify({"election": election.to_json(), "nominees": return_nominees})
 
 #DELETE ELECTION
 @app.route('/delete_election/<int:election_id>', methods = ["DELETE"])
@@ -151,8 +158,8 @@ def get_nominees():
     return jsonify({"nominees": json_nominee})
 
 #Get Specific nominee
-@app.route('/get_nominee_s/<int:election_id>', methods = ["GET"])
-def get_nominee_s(election_id):
+@app.route('/get_nominee_s', methods = ["GET"])
+def get_nominee_s():
     nominee = models.Nominee.query.all()
     json_nominee = list(map(lambda x: x.to_json(), nominee))
     return jsonify({"nominees": json_nominee})
@@ -260,8 +267,12 @@ def submit_election():
 
     return jsonify({}), 201
 
-#@app.route('/create_vote', method = ["GET", "POST"])
-#def sub
+'''@app.route('/submit_vote', method = ["GET", "POST"])
+def submit_vote():
+    election = get_election()
+    print(election)
+    #position = models.Position.query.get()'''
+    
 
 #default page for looking at sql database values
 @app.route('/')
