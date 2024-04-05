@@ -271,10 +271,25 @@ def submit_election():
     return jsonify({new_election.election_id}), 201
 
 @app.route('/api/votes/submit', methods=["POST"])
-def submit_vote2():
-    position_id = request.json.get('position_id')
-    voter_id = request.json.get('voter_id')
-    preference_list = request.json.get('preference_list')
+def submit_vote3():
+    nominees = request.json.get('nominees')
+    name = request.json.get('name')
+    email = request.json.get('email')
+
+    try:
+        new_voter models.Voter(name=name, email=email)
+        db.session.add(new_voter)
+        db.session.commit()
+    except: 
+        return jsonify({}), 500
+
+    if not nominees:
+        return jsonify({}) 400
+    for n in nominees:
+
+        submit_vote2(n['position_id'], new_voter.voter_id, n)
+
+def submit_vote2(position_id, voter_id, preference_list):
 
     if not (position_id and voter_id and preference_list):
         return jsonify({"error": "missing position_id, voter_id or preference_list"})
@@ -292,7 +307,9 @@ def submit_vote2():
         return jsonify({"message": str(e)}), 500
 
     return jsonify({}), 201
-    
+
+
+
     
 
 #@app.route('/create_vote', method = ["GET", "POST"])
