@@ -52,20 +52,21 @@ def delete_election(election_id):
 def create_voter():
     verified_status = False
     email = request.json.get('email')
-    
+    print(request.json)
     if not email:
         return (
             jsonify({"message": "Missing email"}),
             400,
         )
+    #Validate for Melbourne Uni Email
     at_index = email.find('@')
-    if email[at_index:] != '@student.unimelb.edu.au':
+    '''if email[at_index:] != '@student.unimelb.edu.au':
         return (
             jsonify({"message": "Invalid Email. Must be melbourne uni email"}),
             400,
-        )
+        )'''
 
-    new_voter = models.Voters(email = email)
+    new_voter = models.Voters(email = email, verified_status = verified_status)
 
     try:
         db.session.add(new_voter)
@@ -205,9 +206,17 @@ def get_club(club_id):
     club_search = models.Clubs.query.get(club_id)
     return jsonify(club_search), 200
 
+#GET ALL CLUBS
+@app.route('/get_all_clubs')
+def get_all_clubs():
+    clubs = models.Clubs.query.all()
+    json_contacts = list(map(lambda x: x.to_json(), clubs))
+    return jsonify({"clubs": clubs})
+
+#default page for looking at sql database values
 @app.route('/')
-def home():
-    return 'hello'
+def return_database_values():
+    return get_voters()
 
 if __name__ == "__main__":
     db.create_all()

@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 export default function Join() {
 
-    const ip = "https://localhost:5000/create_voter"
+    const ip = "http://localhost:5000/create_voter"
 
     var [text, setText] = useState('');
     const [formData, setForm] = useState({
@@ -30,7 +30,7 @@ export default function Join() {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(formData)
         };
-
+        console.log(requestOptions)
         fetch(ip, requestOptions).then(response => response.json());
     }
 
