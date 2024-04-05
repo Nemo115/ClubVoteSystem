@@ -338,6 +338,18 @@ def submit_vote():
     
     return jsonify({}), 201
 
+
+@app.route('/api/election/isFinished')
+def is_finished():
+    election_id = request.args.get('electionId')
+
+    election = models.Election.query.get(election_id)
+    end_time = election.end_time
+    now = datetime.datetime.now()
+
+    return jsonify({"finished": end_time < now}), 200
+
+
 #@app.route('/create_vote', method = ["GET", "POST"])
 #def sub
 

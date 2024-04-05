@@ -17,7 +17,7 @@ const ResultsPage = () => {
             console.log(id)
             axios({
                 method: 'GET',
-                url: `${BACKEND_URL}/election/isFinished`,
+                url: `${BACKEND_URL}/election/isFinished?electionId=${id}`,
                 data: {
                     electionId: id
                 }
