@@ -24,7 +24,7 @@ export default function Voting() {
         method: 'GET',
     };
 
-    fetch(url_get, requestOptions)
+    fetch(url_get + code, requestOptions)
     .then(response => {
         if (!response.ok) {
             throw new Error("Network response not ok");
@@ -104,7 +104,7 @@ export default function Voting() {
         fetch(url_post, requestOptions).then(response => response.json());
     }
   return (
-    <div>
+    <div style={wrapperStyle}>
         <h2>Enter Information</h2>
         <div style={formContainerStyle}>
             <label htmlFor="" style={formStyle.label}>
@@ -168,6 +168,16 @@ const formContainerStyle = {
     alignItems: 'center',
 }
 
+const wrapperStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    maxWidth: '20rem',
+    margin: 'auto',
+    marginTop: '2rem',
+    gap: '0.5rem',
+}
+
 const formStyle = {
     input: {
         marginTop: '0.5rem',
@@ -176,7 +186,8 @@ const formStyle = {
         fontSize: '1rem',
         textAlign: 'center',
         marginBottom: '0.5rem',
-        marginLeft: '0.5rem'
+        marginLeft: '0.5rem',
+        borderRadius: '30px',
     },
     label: {
         wdith: '100%',
@@ -188,7 +199,7 @@ const formStyle = {
         border: 0,
         outline: 0,
         border: '0.05rem solid white',
-        borderRadius: '0.2rem',
+        borderRadius: '20px',
         fontSize: '1rem',
         color: 'white',
         fontFamily: 'Roboto',
