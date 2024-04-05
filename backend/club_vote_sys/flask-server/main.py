@@ -39,8 +39,7 @@ def create_election():
 def get_election():
     election_id = request.args.get('election_id')
     election = models.Election.query.get(election_id)
-    json_election = list(map(lambda x: x.to_json(), election))
-    return jsonify({"election": json_election})
+    return jsonify({"election": election.to_json()})
 
 #DELETE ELECTION
 @app.route('/delete_election/<int:election_id>', methods = ["DELETE"])

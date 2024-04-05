@@ -19,7 +19,6 @@ class Election(db.Model):
             "electionID":self.election_id,
             "name": self.name,
             "description": self.description,
-            "electionCode":self.election_code,
             "startTime":self.start_time,
             "endTime":self.end_time,
             "showResults":self.show_results
