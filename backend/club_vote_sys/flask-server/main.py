@@ -33,6 +33,20 @@ def create_election():
 
     return jsonify({"message": "Election created!"}), 201
 
+@app.route('/api/elections/create', methods=["POST"])
+def create_election2():
+    name = request.json.get('name')
+    startTime = request.json.get('startTime')
+    finishTime = request.json.get('finishTime')
+    positions = request.json.get('positions')
+    if(not (name and startTime and finishTime and positions)):
+        return jsonify({"error": "Missing start time, finish time, positions or name"}), 401
+
+    
+
+    return jsonify({}), 201
+
+
 #DELETE ELECTION
 @app.route('/delete_election/<int:election_id>', methods = ["DELETE"])
 def delete_election(election_id):
@@ -56,10 +70,7 @@ def create_voter():
 
     print(request.json)
     if not email:
-        return (
-            jsonify({"message": "Missing email"}),
-            400,
-        )
+        return jsonify({"message": "Missing email"}), 400
     #Validate for Melbourne Uni Email
     at_index = email.find('@')
     '''if email[at_index:] != '@student.unimelb.edu.au':
