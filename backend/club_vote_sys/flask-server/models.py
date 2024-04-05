@@ -72,6 +72,15 @@ class Voters(db.Model):
             "electionID": self.election_id
         }
 
+
+class Vote(db.Model):
+    __tablename__ = 'Vote'
+    vote_id = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    position_id = db.Column(db.Integer, db.ForeignKey('Position.position_id'))
+    rank = db.Column(db.Integer)
+    score = db.Column(db.Integer)
+
+
 '''
 class Clubs(db.Model):
     __tablename__ = 'Clubs'

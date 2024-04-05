@@ -265,7 +265,7 @@ def submit_election():
     except Exception as e:
         return jsonify({"message": str(e)}), 500
 
-    return jsonify({}), 201
+    return jsonify({new_election.election_id}), 201
 
 '''@app.route('/submit_vote', method = ["GET", "POST"])
 def submit_vote():
