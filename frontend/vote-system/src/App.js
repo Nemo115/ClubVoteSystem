@@ -6,7 +6,7 @@ import Join from './Pages/Join';
 import { useState } from 'react';
 import { HomePage } from './Pages/Home';
 import { CreatePage } from './Pages/Create';
-import Voting from './Pages/Voting';
+import Voting from './Pages/Voting2';
 import { ResultsPage } from './Pages/Results';
 
 function App() {
