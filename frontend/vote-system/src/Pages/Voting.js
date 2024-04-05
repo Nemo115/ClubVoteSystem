@@ -5,7 +5,7 @@ import { themeHighlight } from '../constants';
 
 export default function Voting() {
     // Getting code from URL
-    const url_get = 'http://localhost:5000/get_nominee_s/'
+    const url_get = 'http://localhost:5000/get_election'
     const url_post = 'http://localhost:5000/create_voter'
     const searchParams = new URLSearchParams(window.location.search);
     const code = searchParams.get('code')
@@ -31,7 +31,8 @@ export default function Voting() {
         }
         return response.json();
     }).then(data => {
-        setNominees(data);
+        console.log(data);
+        setNominees(data.nominees);
     }).catch(error => {
         console.error('Error', error);
     })
