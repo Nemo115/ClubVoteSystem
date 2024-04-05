@@ -78,7 +78,7 @@ class Vote(db.Model):
     vote_id = db.Column(db.Integer, primary_key=True, autoincrement = True)
     position_id = db.Column(db.Integer, db.ForeignKey('Position.position_id'))
     rank = db.Column(db.Integer)
-    score = db.Column(db.integer)
+    score = db.Column(db.Integer)
 
 
 '''
