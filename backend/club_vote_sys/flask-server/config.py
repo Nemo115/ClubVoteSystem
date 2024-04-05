@@ -14,3 +14,5 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 app.app_context().push()
+
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})

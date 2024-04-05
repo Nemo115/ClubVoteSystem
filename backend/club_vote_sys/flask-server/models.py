@@ -16,8 +16,8 @@ class Election(db.Model):
     name = db.Column(db.String(45))
     description = db.Column(db.String(45))
     election_code = db.Column(db.String(45))
-    start_time = db.Column(db.String(45))
-    end_time = db.Column(db.String(45))
+    start_time = db.Column(db.DateTime)
+    end_time = db.Column(db.DateTime)
     club_id = db.Column(db.Integer, db.ForeignKey('Clubs.club_id'))
 
     def to_json(self):

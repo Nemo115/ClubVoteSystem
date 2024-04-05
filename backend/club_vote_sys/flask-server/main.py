@@ -6,8 +6,6 @@ from flask_cors import CORS
 from config import app, db
 import models
 
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-
 #CREATE ELECTION <-- (get clubs database)
 @app.route('/create_election', methods=["POST"])
 def create_election():
