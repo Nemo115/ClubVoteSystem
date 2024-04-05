@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { themeHighlight } from "../constants"
+import { BACKEND_URL, themeHighlight } from "../constants"
 import axios from 'axios'
 
 
@@ -13,7 +13,7 @@ const CreatePage = () => {
     const handleSubmit = () => {
         axios({
             method: 'POST',
-            url: 'http://backend.com',
+            url: `${BACKEND_URL}/elections/create`,
             data: {
                 name: description,
                 startTime,
