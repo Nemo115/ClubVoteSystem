@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { themeBackground } from '../constants';
 import { themeHighlight } from '../constants';
 
@@ -9,6 +9,10 @@ export default function Voting() {
     const url_post = 'http://localhost:5000/create_voter'
     const searchParams = new URLSearchParams(window.location.search);
     const code = searchParams.get('code')
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     // Defining useStates
     const [nominees, setNominees] = useState([])
@@ -24,18 +28,22 @@ export default function Voting() {
         method: 'GET',
     };
 
-    fetch(url_get + '?election_id=' + code, requestOptions)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Network response not ok");
-        }
-        return response.json();
-    }).then(data => {
-        console.log(data);
-        setNominees(data.nominees);
-    }).catch(error => {
-        console.error('Error', error);
-    })
+    const fetchData = async () => {
+        fetch(url_get + '?election_id=' + code, requestOptions)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response not ok");
+            }
+            return response.json();
+        }).then(data => {
+            console.log(data);
+            setNominees(data.nominees);
+        }).catch(error => {
+            console.error('Error', error);
+        })
+    }
+
+    
 
     // Get positions
     var positions = []
