@@ -5,6 +5,7 @@ from flask import request, jsonify
 from flask_cors import CORS
 from config import app, db
 import models
+import datetime
 
 #CREATE ELECTION <-- (get clubs database)
 @app.route('/create_election', methods=["POST"])
@@ -36,11 +37,47 @@ def create_election():
 @app.route('/api/elections/create', methods=["POST"])
 def create_election2():
     name = request.json.get('name')
+    description = request.json.get('description')
     startTime = request.json.get('startTime')
     finishTime = request.json.get('finishTime')
     positions = request.json.get('positions')
-    if(not (name and startTime and finishTime and positions)):
-        return jsonify({"error": "Missing start time, finish time, positions or name"}), 401
+    showResults = request.json.get('showResults')
+    print(showResults)
+
+    if (not (name and startTime and finishTime and positions and description)):
+        return jsonify({"error": "Missing start time, finish time, positions, description or name"}), 401
+    
+    startHour = int(startTime[:2])
+    finishHour = int(finishTime[:2])
+    startMin = int(startTime[3:])
+    finishMin = int(startTime[3:])
+
+    today = datetime.datetime.now()
+
+    startTime = datetime.datetime(today.year, today.month, today.day, startHour, startMin)
+    finishTime = datetime.datetime(today.year, today.month, today.day, finishHour, finishMin)
+
+    try:
+        new_election = models.Election(name = name, description = description, start_time = startTime, end_time = finishTime, show_results = showResults)
+        db.session.add(new_election)
+        db.session.commit()
+        election_id = new_election.election_id
+    
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+
+
+    try:
+        for pos in positions:
+            new_position = models.Position(name = pos['name'], election_id=election_id)
+            db.session.add(new_position)
+            db.session.commit()
+            for name in pos['candidates']:
+                new_nominee = models.Nominee(name=name, position_id=new_position.position_id)
+                db.session.add(new_nominee)
+        db.session.commit()
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
 
     
 
