@@ -132,6 +132,16 @@ def delete_vote(vote_id):
 
     return jsonify({"message": "Vote deleted!"}), 200
 '''
+@app.route('/get_votes', methods = ["GET"])# LOOK AT ALL THE VOTES
+def get_votes():
+    '''me = models.Voters(verified_status = False,email = 'JohnDoe@gmail.com')
+    db.session.add(me)
+    db.session.commit()'''
+
+    vote_query = models.Vote.query.all()
+    json_votes = list(map(lambda x: x.to_json(), vote_query))
+    return jsonify({"voters":json_votes})
+
 #CREATE NOMINEE
 @app.route('/create_nominee', methods = ["POST"])
 def create_nominee():
@@ -168,7 +178,7 @@ def get_nominee_s():
     return jsonify({"nominees": json_nominee})
 
 #UPDATE NOMINEE
-@app.route('/update_nominee')
+#@app.route('/update_nominee')
 
 #DELETE NOMINEE
 @app.route('/delete_nominee/<int:nominee_id>', methods = ["DELETE"])
@@ -279,30 +289,8 @@ def submit_election():
 
     return jsonify({"election_id": id}), 201
 
-@app.route('/api/votes/submit', methods=["POST"])
-def submit_vote3():
-    nominees = request.json.get('nominees')
-    name = request.json.get('name')
-    email = request.json.get('email')
-
-    try:
-        print('HERE')
-        new_voter = models.Voters(name=name, email=email)
-        print('Here2')
-        db.session.add(new_voter)
-        db.session.commit()
-    except Exception as e:
-        return jsonify({"message": str(e)}), 500
-
-        printf('Here3')
-    if not nominees:
-        return jsonify({}), 400
-    for n in nominees:
-
-        submit_vote2(n['position_id'], new_voter.voter_id, n)
-
-def submit_vote2(position_id, voter_id, preference_list):
-
+## <-------THIS FUNCTION WAS PREVIOUSLY CALLED submit_vote2()-------->
+def submit_vote_data(position_id, voter_id, preference_list):
     if not (position_id and voter_id and preference_list):
         return jsonify({"error": "missing position_id, voter_id or preference_list"})
     
@@ -318,7 +306,29 @@ def submit_vote2(position_id, voter_id, preference_list):
     except Exception as e:
         return jsonify({"message": str(e)}), 500
 
+    print(("SUBMITTED VOTE")+("="*20))
+
     return jsonify({}), 201
+
+@app.route('/api/votes/submit', methods=["POST"])
+def submit_vote():
+    nominees = request.json.get('nominees')
+    name = request.json.get('name')
+    email = request.json.get('email')
+
+    try:
+        print('HERE')
+        new_voter = models.Voters(name=name, email=email)
+        print('Here2')
+        db.session.add(new_voter)
+        db.session.commit()
+    except Exception as e:
+        print('Here3')
+        return jsonify({"message": str(e)}), 500
+    if not nominees:
+        return jsonify({}), 400
+    for n in nominees:
+        submit_vote_data(n['position_id'], new_voter.voter_id, n)
 
 #@app.route('/create_vote', method = ["GET", "POST"])
 #def sub

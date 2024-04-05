@@ -1,3 +1,14 @@
+Current Problem:
+                    Vote not submitting as a new entry
+                    Also haven't figured out how to calculate results
+
+Possible Progress:
+                    quickly hook up a gmail smtp service to the flask app and do email verification
+
+
+
+
+
 app/api/v1/:
             election/create:
                             send -> {
