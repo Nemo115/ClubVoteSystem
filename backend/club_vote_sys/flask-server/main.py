@@ -255,6 +255,7 @@ def submit_election():
     except Exception as e:
         return jsonify({"message": str(e)}), 500
 
+    print("HERERERERE")
 
     try:
         for pos in positions:
@@ -263,12 +264,20 @@ def submit_election():
             db.session.commit()
             for name in pos['candidates']:
                 new_nominee = models.Nominee(name=name, position_id=new_position.position_id, election_id = election_id)
+                print(new_nominee)
                 db.session.add(new_nominee)
         db.session.commit()
     except Exception as e:
         return jsonify({"message": str(e)}), 500
 
-    return jsonify({new_election.election_id}), 201
+
+    print(new_election.election_id)
+
+    id = int(new_election.election_id)
+
+    print(id)
+
+    return jsonify({"election_id": id}), 201
 
 @app.route('/api/votes/submit', methods=["POST"])
 def submit_vote3():
