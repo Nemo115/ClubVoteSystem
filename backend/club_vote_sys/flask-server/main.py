@@ -276,6 +276,20 @@ def submit_vote2():
     if not (position_id and voter_id and preference_list):
         return jsonify({"error": "missing position_id, voter_id or preference_list"})
     
+    numvotes = len(preference_list)
+
+    try:
+        for i in range(numvotes):
+            print(preference_list[i])
+            new_vote = models.Vote(position_id=position_id, rank=i + 1, score=preference_list[i]['score'])
+            db.session.add(new_vote)
+        db.session.commit()
+    
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+
+    return jsonify({}), 201
+    
     
 
 #@app.route('/create_vote', method = ["GET", "POST"])
