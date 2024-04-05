@@ -327,7 +327,7 @@ def submit_vote2(position_id, voter_id, preference_list):
 #default page for looking at sql database values
 @app.route('/')
 def return_database_values():
-    return get_nominees()
+    return get_voters()
 
 if __name__ == "__main__":
     db.create_all()
