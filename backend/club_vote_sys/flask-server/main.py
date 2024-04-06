@@ -36,9 +36,8 @@ def create_election():
     return jsonify({"message": "Election created!"}), 201
 
 #GET ELECTION
-@app.route('/get_election', methods = ["GET"])
-def get_election():
-    election_id = request.args.get('election_id')
+@app.route('/get_election/<int:election_id>', methods = ["GET"])
+def get_election(election_id):
     election = models.Election.query.get(election_id)
     nominees = models.Nominee.query.all()
 
@@ -51,6 +50,13 @@ def get_election():
         return_nominees.append(nominee)
     
     return jsonify({"election": election.to_json(), "nominees": return_nominees})
+
+#GET ALL ELECTIONS
+@app.route('/get_elections', methods = ['GET'])
+def get_elections():
+    election_query = models.Election.query.all()
+    json_election = list(map(lambda x: x.to_json(), election_query))
+    return jsonify({"elections":json_election})
 
 #DELETE ELECTION
 @app.route('/delete_election/<int:election_id>', methods = ["DELETE"])
@@ -89,7 +95,7 @@ def create_voter():
     try:
         db.session.add(new_voter)
         db.session.commit()
-        #SEND VERIFICATION EMAIL HERE AND CALL update_voter
+        #SEND VERIFICATION EMAIL HERE AND SEND LINK THAT CALLS update_voter
         send_email(new_voter.email, f'http://localhost:5000/update_voter/{new_voter.voter_id}')
     except Exception as e:
         return jsonify({"message": str(e)}), 400
@@ -137,10 +143,6 @@ def delete_vote(vote_id):
 '''
 @app.route('/get_votes', methods = ["GET"])# LOOK AT ALL THE VOTES
 def get_votes():
-    '''me = models.Voters(verified_status = False,email = 'JohnDoe@gmail.com')
-    db.session.add(me)
-    db.session.commit()'''
-
     vote_query = models.Vote.query.all()
     json_votes = list(map(lambda x: x.to_json(), vote_query))
     return jsonify({"voters":json_votes})
@@ -303,9 +305,11 @@ def submit_vote():
     currentPosition = []
 
     try:
-        new_voter = models.Voters(name=name, email=email)
+        new_voter = models.Voters(name=name, email=email, verified_status = False)
         db.session.add(new_voter)
         db.session.commit()
+        #SEND VERIFICATION EMAIL HERE AND SEND LINK THAT CALLS update_voter
+        send_email(new_voter.email, f'http://localhost:5000/update_voter/{new_voter.voter_id}')
     except Exception as e:
         print('Here3')
         return jsonify({"message": str(e)}), 500
@@ -333,8 +337,6 @@ def submit_vote():
         return jsonify({"message": str(e)}), 500
 
     #submit_vote_data(n['positionID'], new_voter.voter_id, n)
-
-        
     
     return jsonify({}), 201
 
