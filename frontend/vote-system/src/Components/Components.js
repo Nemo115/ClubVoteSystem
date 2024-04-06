@@ -10,9 +10,8 @@ const Header = () =>
            <p style={HeaderStyle.heading}>{title}</p>
            <nav style={HeaderStyle.menu} className='headerMenu'>
                 <button onClick={() => window.location.href = '/'}>HOME</button>
-                <button onClick={() => window.location.href = '/about'}>ABOUT</button>
-                <button onClick={() => window.location.href = ''}>CREATE</button>
-                <button >RESULTS</button>
+                <button onClick={() => window.location.href = '/create'}>CREATE</button>
+                <button onClick={() => window.location.href = '/results'}>RESULTS</button>
            </nav>
         </header>
     )

@@ -8,16 +8,18 @@ import { AboutItem, Footer } from "../Components/Components";
 
 const HomePage = () => 
 {
+    var [code, setCode] = useState('');
+
     return (
         <div style={HomePageStyle.homeWrapper}>
             <div style={HomePageStyle.heroWrapper}>    
                 <img style={HomePageStyle.hero} src={hero}></img>
                 <div style={HomePageStyle.heroContentWrapper}>
                     <h1 style={HomePageStyle.heroHeading}>Get your elections done, easy.</h1>
-                    <input placeholder="join code" style={HomePageStyle.joinCodeInput}></input>
-                    <button style={HomePageStyle.joinButton}>JOIN</button>
+                    <input placeholder="join code" style={HomePageStyle.joinCodeInput} onChange={(e) => setCode(e.target.value)}></input>
+                    <button style={HomePageStyle.joinButton} onClick={() => window.location.href = '/voting?code=' + code}>JOIN</button>
                     <p style={HomePageStyle.orText}>Or,</p>
-                    <button style={HomePageStyle.createButton}>CREATE ELECTION</button>
+                    <button style={HomePageStyle.createButton} onClick={() => window.location.href = '/create'}>CREATE ELECTION</button>
                 </div>
             </div>
             <h2>About</h2>
