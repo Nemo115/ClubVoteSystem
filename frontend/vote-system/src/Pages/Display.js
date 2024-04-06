@@ -5,7 +5,7 @@ import os from 'os'
 import { useEffect, useState } from 'react'
 const DisplayPage = () => {
     const {id} = useParams()
-    const baseIp = 'http://192.168.0.106:3000/'
+    const baseIp = 'http://codebrew.caillin.net/'
     console.log('adsa')
     const [QRImage, setQRImage] = useState('')
     useEffect(() => {

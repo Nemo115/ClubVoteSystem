@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 export default function Join() {
 
-    const ip = "http://localhost:5000/create_voter"
+    const ip = "http://api.codebrew.caillin.net/create_voter"
 
     var [text, setText] = useState('');
     const [formData, setForm] = useState({

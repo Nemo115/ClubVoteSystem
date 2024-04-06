@@ -5,7 +5,7 @@ import { themeHighlight } from '../constants';
 
 export function VerifyPage() {
     // Getting code from URL
-    const url = 'http://localhost:5000/update_voter'
+    const url = 'http://api.codebrew.caillin.net/update_voter'
     const searchParams = new URLSearchParams(window.location.search);
     const code = searchParams.get('code')
 

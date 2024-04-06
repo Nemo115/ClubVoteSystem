@@ -317,7 +317,7 @@ def submit_vote():
         db.session.add(new_voter)
         db.session.commit()
         #SEND VERIFICATION EMAIL HERE AND SEND LINK THAT CALLS update_voter
-        send_email(new_voter.email, f'http://localhost:3000/verify/?code={new_voter.voter_id}')
+        send_email(new_voter.email, f'http://codebrew.caillin.net/verify/?code={new_voter.voter_id}')
     except Exception as e:
         print('Here3')
         return jsonify({"message": str(e)}), 500
