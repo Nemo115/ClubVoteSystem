@@ -11,7 +11,7 @@ const Header = () =>
            <nav style={HeaderStyle.menu} className='headerMenu'>
                 <button onClick={() => window.location.href = '/'}>HOME</button>
                 <button onClick={() => window.location.href = '/create'}>CREATE</button>
-                <button >RESULTS</button>
+                <button onClick={() => window.location.href = '/results'}>RESULTS</button>
            </nav>
         </header>
     )
