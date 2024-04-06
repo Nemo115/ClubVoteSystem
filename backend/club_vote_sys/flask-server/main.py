@@ -304,6 +304,14 @@ def submit_vote():
     nomineesOrganised = []
     currentPosition = []
 
+    #EMAIL VALIDATION FOR UNIMELB EMAIL
+    at_index = email.find('@')
+    if email[at_index:] != '@student.unimelb.edu.au':
+        return (
+            jsonify({"message": "Invalid Email. Must be melbourne uni email"}),
+            400,
+        )
+
     try:
         new_voter = models.Voters(name=name, email=email, verified_status = False)
         db.session.add(new_voter)
@@ -363,7 +371,6 @@ def print2(arr):
         print(a)
 
 def get_position_result(position_id):
-
     votes = models.Vote.query.filter_by(position_id=str(position_id)).all()
     big_votes = []
     current_vote = []

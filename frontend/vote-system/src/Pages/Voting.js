@@ -110,7 +110,24 @@ export default function Voting() {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(return_vote)
         };
-        fetch(url_post, requestOptions).then(response => response.json());
+        fetch(url_post, requestOptions).then((response) => {
+            if (response.status === 400) {
+                alert("Invalid email");
+            }
+            else{
+                window.location.href = '/results/'+code
+            }
+        });
+        
+        
+        /*const response = fetch(url, options)
+        if (response.status !== 201 && response.status !== 200) {
+            const data = response.json()
+            alert(data.message)
+        } else {
+            updateCallback()
+        }*/
+        //window.location.href = '/results/'+code
     }
   return (
     <div style={wrapperStyle}>
