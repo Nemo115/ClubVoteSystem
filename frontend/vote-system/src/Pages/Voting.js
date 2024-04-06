@@ -40,10 +40,10 @@ export default function Voting() {
             setNominees(data.nominees);
         }).catch(error => {
             console.error('Error', error);
+            window.location.href = '/';
+            alert("Not a valid voting session code");
         })
     }
-
-    
 
     // Get positions
     var positions = []
