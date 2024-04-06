@@ -114,7 +114,7 @@ export default function Voting() {
     }
   return (
     <div style={wrapperStyle}>
-        <h2>Enter Information</h2>
+        <h1>Enter Information</h1>
         <div style={formContainerStyle}>
             <label htmlFor="" style={formStyle.label}>
                 Name:
@@ -129,14 +129,16 @@ export default function Voting() {
                 <input style={formStyle.input} name= "studentId" type="text" value={formData.studentId} onChange={changeForm}/>
             </label>
         </div>
-        <h2>Vote for Candidates</h2>
+        <h1>Vote for Candidates</h1>
         <div className='candidates-list'>
             {positions.map((position, index) => (
-                <div>
-                    <h1>{position}</h1>
-                    <div key={index}>
+                <div style={candidatesForm}>
+                    <h2>{position}</h2>
+                    <div key={index} style={candidatesForm}>
                         {nominees.map((nominee, index) => (
-                            nominee.position === position && <div 
+                            nominee.position === position && <div
+                            key={index}
+                            style={draggableStyle} 
                             draggable
                             onDragStart={() => (dragPerson.current = index)}
                             onDragEnter = {() => (draggedOverPerson.current = index)}
@@ -154,21 +156,60 @@ export default function Voting() {
   )
 }
 
-const listStyle = {
-    listStyle: "none",
-    fontSize: "30px"
-}
-
-const checkBoxstyle = {
-    width: "1rem",
-    height: "1rem"
-}
-
 const styles = {
     container: {
         backgroundColor: themeBackground,
     }
 };
+
+const formStyle = {
+    input: {
+        marginTop: '0.5rem',
+        width: '70%',
+        height: '2rem',
+        fontSize: '1rem',
+        textAlign: 'center',
+        marginBottom: '0.5rem',
+        marginLeft: '0.5rem',
+        borderRadius: '0.5rem',
+    },
+    label: {
+        wdith: '100%',
+        fontSize: '20px'
+    },
+    submit: {
+        backgroundColor: themeHighlight,
+        height: '2.5rem',
+        outline: 0,
+        border: '0.05rem solid white',
+        borderRadius: '0.5rem',
+        fontSize: '1.5rem',
+        padding: '0.5rem',
+        color: 'white',
+        fontFamily: 'Roboto',
+        maxWidth: "30rem",
+        minWidth: "25rem",
+        marginTop: "2rem",
+        marginBottom: "2rem",
+        height: "3rem"
+    }
+}
+
+const candidatesForm = {
+    justifyContent: "center"
+}
+
+const draggableStyle = {
+    border: "2px solid black",
+    marginBottom: "10px",
+    backgroundColor: themeHighlight,
+    color: "white",
+    borderRadius: "0.5rem",
+    cursor: "pointer",
+    fontWeight: "bold",
+    maxWidth: "30rem",
+    minWidth: "25rem"
+}
 
 const formContainerStyle = {
     margin: 'auto',
@@ -181,37 +222,9 @@ const wrapperStyle = {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    maxWidth: '20rem',
+    maxWidth: '30rem',
     margin: 'auto',
     marginTop: '2rem',
     gap: '0.5rem',
-}
-
-const formStyle = {
-    input: {
-        marginTop: '0.5rem',
-        width: '70%',
-        height: '2rem',
-        fontSize: '1rem',
-        textAlign: 'center',
-        marginBottom: '0.5rem',
-        marginLeft: '0.5rem',
-        borderRadius: '30px',
-    },
-    label: {
-        wdith: '100%',
-        fontSize: '20px'
-    },
-    submit: {
-        backgroundColor: themeHighlight,
-        height: '2.5rem',
-        border: 0,
-        outline: 0,
-        border: '0.05rem solid white',
-        borderRadius: '20px',
-        fontSize: '1rem',
-        color: 'white',
-        fontFamily: 'Roboto',
-        width: '50%',
-    }
+    alignItems: "center"
 }
