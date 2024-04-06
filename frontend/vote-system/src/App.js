@@ -9,6 +9,7 @@ import { CreatePage } from './Pages/Create';
 import Voting from './Pages/Voting';
 import { ResultsPage } from './Pages/Results';
 import { DisplayPage } from './Pages/Display';
+import {VerifyPage} from './Pages/Verify'
 
 function App() {
 
@@ -36,6 +37,10 @@ function App() {
     {
       path: '/display/:id',
       element: <DisplayPage />
+    },
+    {
+      path: '/verify',
+      element: <VerifyPage />
     }
   ])
 

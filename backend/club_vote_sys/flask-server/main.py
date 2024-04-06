@@ -96,7 +96,7 @@ def create_voter():
         db.session.add(new_voter)
         db.session.commit()
         #SEND VERIFICATION EMAIL HERE AND SEND LINK THAT CALLS update_voter
-        send_email(new_voter.email, f'http://localhost:5000/update_voter/{new_voter.voter_id}')
+        send_email(new_voter.email, f'http://localhost:3000/verify/?code={new_voter.voter_id}')
     except Exception as e:
         return jsonify({"message": str(e)}), 400
 
@@ -110,7 +110,7 @@ def verify_voter(voter_id):
     voter.verified_status = True
     db.session.commit()
 
-    return jsonify({"message": "Voter Verified"}), 200
+    return jsonify({"voter_name": voter.name}), 200
 
 #GET ALL VOTERS
 @app.route('/voters', methods = ["GET"])
@@ -309,7 +309,7 @@ def submit_vote():
         db.session.add(new_voter)
         db.session.commit()
         #SEND VERIFICATION EMAIL HERE AND SEND LINK THAT CALLS update_voter
-        send_email(new_voter.email, f'http://localhost:5000/update_voter/{new_voter.voter_id}')
+        send_email(new_voter.email, f'http://localhost:3000/verify/?code={new_voter.voter_id}')
     except Exception as e:
         print('Here3')
         return jsonify({"message": str(e)}), 500
